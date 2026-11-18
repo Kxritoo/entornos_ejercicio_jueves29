@@ -1,0 +1,20 @@
+from fastapi import FastAPI
+from google import genai
+
+app = FastAPI()
+
+client = genai.Client()
+
+@app.get("/chat/{saludo}")
+def llamar_ia(saludo):
+    instruccion = "Hablame en ingles siempre"
+    inferencia = client.interactions.create(
+        model="gemini-3.1-flash-lite",
+        input= instruccion + saludo
+    )
+    return {"Respuesta": inferencia.output_text }
+       
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: str | None = None):
+    return {"item_id": item_id, "q": q}
